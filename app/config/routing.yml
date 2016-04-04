@@ -1,3 +1,17 @@
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    
+routing_path:
+    resource: '@AppBundle/Controller/Routing/generalRouting.yml'
+
+customer_routing_path:
+    resource: '@AppBundle/Controller/Routing/customerRouting.yml'
+    prefix:     /customer
+
+shop_routing_path:
+    resource: '@AppBundle/Controller/Routing/shopRouting.yml'
+    prefix:     /shop

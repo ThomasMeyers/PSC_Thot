@@ -1,0 +1,16 @@
+# src/AppBundle/Routing/routing.yml
+ 
+welcome:
+    path:      /
+    defaults: { _controller: AppBundle:Content:welcome}
+
+home:
+    path:      /home
+    defaults:  { _controller: AppBundle:Content:home}
+    
+logout:
+    path:      /logout
+
+register:
+    path:      /register
+    defaults:  { _controller: FOSUserBundle:Registration:register}

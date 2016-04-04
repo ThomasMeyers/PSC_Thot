@@ -1,0 +1,6 @@
+# src/AppBundle/Routing/shopRouting.yml
+ 
+
+shop_home:
+    path:      /home
+    defaults:  { _controller: AppBundle:ShopContent:home}

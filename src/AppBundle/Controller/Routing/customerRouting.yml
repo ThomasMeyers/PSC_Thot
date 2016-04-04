@@ -1,0 +1,6 @@
+# src/AppBundle/Routing/customerRouting.yml
+
+
+customer_home:
+    path:      /home 
+    defaults:  { _controller: AppBundle:CustomerContent:home}
