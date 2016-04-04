@@ -1,0 +1,245 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
+
+/**
+ * User
+ *
+ * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ */
+class User extends BaseUser { /**
+  /**
+ * @var int
+ *
+ * @ORM\Column(name="id", type="integer")
+ * @ORM\Id
+ * @ORM\GeneratedValue(strategy="AUTO")
+ */
+
+    protected $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Student", mappedBy="user",cascade={"persist"})
+     */
+    private $meStudent;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Teacher", mappedBy="user", cascade={"persist"})
+     */
+    private $meTeacher;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
+     */
+    private $friendsWithMe;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe", indexBy="login")
+     * @ORM\JoinTable(name="friends",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $myFriends;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="friendsAsked", indexBy="login")
+     */
+    private $peopleWhoAsked;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="peopleWhoAsked")
+     * @ORM\JoinTable(name="friendsAsking",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="people_user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $friendsAsked;
+
+    public function __construct() {
+        parent::__construct();
+        $this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->peopleWhoAsked = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->friendsAsked = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->meStudent = new \AppBundle\Entity\Student($this);
+        $this->meTeacher = new \AppBundle\Entity\Teacher($this);
+    }
+
+    /**
+     * Add friendsWithMe
+     *
+     * @param \AppBundle\Entity\User $friendsWithMe
+     *
+     * @return User
+     */
+    public function addFriendsWithMe(\AppBundle\Entity\User $friendsWithMe) {
+        $this->friendsWithMe[] = $friendsWithMe;
+
+        return $this;
+    }
+
+    /**
+     * Remove friendsWithMe
+     *
+     * @param \AppBundle\Entity\User $friendsWithMe
+     */
+    public function removeFriendsWithMe(\AppBundle\Entity\User $friendsWithMe) {
+        $this->friendsWithMe->removeElement($friendsWithMe);
+    }
+
+    /**
+     * Get friendsWithMe
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFriendsWithMe() {
+        return $this->friendsWithMe;
+    }
+
+    /**
+     * Add myFriend
+     *
+     * @param \AppBundle\Entity\User $myFriend
+     *
+     * @return User
+     */
+    public function addMyFriend(\AppBundle\Entity\User $myFriend) {
+        $this->myFriends[] = $myFriend;
+
+        return $this;
+    }
+
+    /**
+     * Remove myFriend
+     *
+     * @param \AppBundle\Entity\User $myFriend
+     */
+    public function removeMyFriend(\AppBundle\Entity\User $myFriend) {
+        $this->myFriends->removeElement($myFriend);
+    }
+
+    /**
+     * Get myFriends
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMyFriends() {
+        return $this->myFriends;
+    }
+
+    /**
+     * Add peopleWhoAsked
+     *
+     * @param \AppBundle\Entity\User $peopleWhoAsked
+     *
+     * @return User
+     */
+    public function addPeopleWhoAsked(\AppBundle\Entity\User $peopleWhoAsked) {
+        $this->peopleWhoAsked[] = $peopleWhoAsked;
+
+        return $this;
+    }
+
+    /**
+     * Remove peopleWhoAsked
+     *
+     * @param \AppBundle\Entity\User $peopleWhoAsked
+     */
+    public function removePeopleWhoAsked(\AppBundle\Entity\User $peopleWhoAsked) {
+        $this->peopleWhoAsked->removeElement($peopleWhoAsked);
+    }
+
+    /**
+     * Get peopleWhoAsked
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeopleWhoAsked() {
+        return $this->peopleWhoAsked;
+    }
+
+    /**
+     * Add friendsAsked
+     *
+     * @param \AppBundle\Entity\User $friendsAsked
+     *
+     * @return User
+     */
+    public function addFriendsAsked(\AppBundle\Entity\User $friendsAsked) {
+        $this->friendsAsked[] = $friendsAsked;
+
+        return $this;
+    }
+
+    /**
+     * Remove friendsAsked
+     *
+     * @param \AppBundle\Entity\User $friendsAsked
+     */
+    public function removeFriendsAsked(\AppBundle\Entity\User $friendsAsked) {
+        $this->friendsAsked->removeElement($friendsAsked);
+    }
+
+    /**
+     * Get friendsAsked
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFriendsAsked() {
+        return $this->friendsAsked;
+    }
+
+
+    /**
+     * Set meStudent
+     *
+     * @param \AppBundle\Entity\Student $meStudent
+     *
+     * @return User
+     */
+    public function setMeStudent(\AppBundle\Entity\Student $meStudent = null)
+    {
+        $this->meStudent = $meStudent;
+
+        return $this;
+    }
+
+    /**
+     * Get meStudent
+     *
+     * @return \AppBundle\Entity\Student
+     */
+    public function getMeStudent()
+    {
+        return $this->meStudent;
+    }
+
+    /**
+     * Set meTeacher
+     *
+     * @param \AppBundle\Entity\Teacher $meTeacher
+     *
+     * @return User
+     */
+    public function setMeTeacher(\AppBundle\Entity\Teacher $meTeacher = null)
+    {
+        $this->meTeacher = $meTeacher;
+
+        return $this;
+    }
+
+    /**
+     * Get meTeacher
+     *
+     * @return \AppBundle\Entity\Teacher
+     */
+    public function getMeTeacher()
+    {
+        return $this->meTeacher;
+    }
+}
